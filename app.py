@@ -123,10 +123,10 @@ def convert_docx_to_pdf():
         # Save uploaded DOCX
         with open(docx_path, 'wb') as f:
             f.write(request.data)
-
+        
         # Convert DOCX to PDF using LibreOffice headless
         result = subprocess.run([
-            "/usr/bin/libreoffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
+            "soffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         if result.returncode != 0:
