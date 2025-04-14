@@ -250,9 +250,11 @@ def convert_docx_to_pdf():
         if os.path.exists(pdf_path):
             os.remove(pdf_path)
 
-if __name__ == '__main__':
-    print("Flask API is running at http://127.0.0.1:5000/convert/docx/to/pdf")
-    # app.run(port=5000, debug=True)
+    if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))  # Взима порта от Render
+    print(f"🚀 Flask API is running at http://0.0.0.0:{port}/convert/docx/to/pdf")
     app.run(host='0.0.0.0', port=port)
+
 
 
