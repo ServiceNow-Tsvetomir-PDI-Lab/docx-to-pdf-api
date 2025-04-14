@@ -114,27 +114,35 @@ def convert_docx_to_pdf():
         return {"error": "No file data received"}, 400
 
     file_id = str(uuid.uuid4())
-    docx_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.docx")
-    pdf_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.pdf")
+    docx_filename = f"{file_id}.docx"
+    pdf_filename = f"{file_id}.pdf"
+    docx_path = os.path.join(UPLOAD_FOLDER, docx_filename)
+    pdf_path = os.path.join(UPLOAD_FOLDER, pdf_filename)
 
     try:
+        # Save uploaded DOCX
         with open(docx_path, 'wb') as f:
             f.write(request.data)
 
-        # 🔧 Convert using LibreOffice
+        # Convert DOCX to PDF using LibreOffice headless
         result = subprocess.run([
-            "soffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
+            "/usr/bin/libreoffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         if result.returncode != 0:
             return {"error": result.stderr.decode('utf-8')}, 500
 
-        return send_file(pdf_path, mimetype='application/pdf')
+        # Send back PDF file
+        if os.path.exists(pdf_path):
+            return send_file(pdf_path, mimetype='application/pdf', as_attachment=True, download_name="converted.pdf")
+        else:
+            return {"error": "PDF not found after conversion"}, 500
 
     except Exception as e:
         return {"error": str(e)}, 500
 
     finally:
+        # Cleanup
         if os.path.exists(docx_path):
             os.remove(docx_path)
         if os.path.exists(pdf_path):
@@ -143,4 +151,3 @@ def convert_docx_to_pdf():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
