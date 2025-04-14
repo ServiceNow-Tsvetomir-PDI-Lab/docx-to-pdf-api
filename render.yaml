@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: docx-to-pdf-api
+    env: python
+    buildCommand: ./build.sh
+    startCommand: ./start.sh
+    plan: free
