@@ -115,23 +115,21 @@ def convert_docx_to_pdf():
 
     file_id = str(uuid.uuid4())
     docx_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.docx")
-    output_dir = os.path.abspath(UPLOAD_FOLDER)
+    pdf_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.pdf")
 
     try:
-        # Save the uploaded DOCX
         with open(docx_path, 'wb') as f:
             f.write(request.data)
 
-        # Use LibreOffice in headless mode to convert
+        # 🔧 Convert using LibreOffice
         result = subprocess.run([
-            "soffice", "--headless", "--convert-to", "pdf", "--outdir", output_dir, docx_path
+            "soffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         if result.returncode != 0:
             return {"error": result.stderr.decode('utf-8')}, 500
 
-        pdf_path = docx_path.replace('.docx', '.pdf')
-        return send_file(pdf_path, mimetype='application/pdf', as_attachment=True, download_name="converted.pdf")
+        return send_file(pdf_path, mimetype='application/pdf')
 
     except Exception as e:
         return {"error": str(e)}, 500
@@ -143,7 +141,6 @@ def convert_docx_to_pdf():
             os.remove(pdf_path)
 
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))
-    print(f"🚀 Running on http://0.0.0.0:{port}")
-    app.run(host="0.0.0.0", port=port)
+    app.run(host='0.0.0.0', port=port)
+
