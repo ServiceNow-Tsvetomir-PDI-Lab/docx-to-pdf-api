@@ -133,3 +133,19 @@ CMD ["python", "app.py"]
 - Returns the PDF stream to the client
 
 ---
+
+## 🔐 Security & Data Privacy
+```markdown
+
+This API is designed with privacy and security in mind. By default:
+
+- ✅ All uploaded `.docx` files are processed **in-memory** and stored **only temporarily** in a private `/uploads` directory within the container.
+- ✅ The converted `.pdf` file is immediately returned in the HTTP response and **never stored permanently** on the server.
+- ✅ After processing, both the input and output files are securely deleted using Python’s `os.remove()` function.
+- ✅ No file names, content, or metadata are logged or retained beyond the request lifecycle.
+
+This behavior ensures full confidentiality of any sensitive documents processed via the API.
+
+```
+
+---
