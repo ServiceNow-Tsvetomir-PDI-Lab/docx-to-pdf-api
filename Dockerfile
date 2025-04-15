@@ -1,24 +1,24 @@
-# Използваме лек Python образ
+# Use a lightweight official Python image
 FROM python:3.10-slim
 
-# Инсталираме LibreOffice
+# Install LibreOffice and other necessary tools
 RUN apt-get update && apt-get install -y libreoffice curl && apt-get clean
 
-# Създаваме работна директория в контейнера
+# Set the working directory inside the container
 WORKDIR /app
 
-# Копираме dependencies и ги инсталираме
+# Copy Python dependencies and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копираме самото приложение
+# Copy the main application file
 COPY app.py .
 
-# Създаваме папка за uploads
+# Create a directory for temporary uploads
 RUN mkdir -p uploads
 
-# Експортираме порт (Render ще използва $PORT автоматично)
+# Expose the port (Render will use the PORT environment variable automatically)
 ENV PORT 10000
 
-# Стартираме Flask приложението
+# Start the Flask application
 CMD ["python", "app.py"]
