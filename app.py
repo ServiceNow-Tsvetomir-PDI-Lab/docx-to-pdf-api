@@ -120,19 +120,23 @@ def convert_docx_to_pdf():
     pdf_path = os.path.join(UPLOAD_FOLDER, pdf_filename)
 
     try:
-        # Save uploaded DOCX
+        # Save DOCX to file
         with open(docx_path, 'wb') as f:
             f.write(request.data)
-        
-        # Convert DOCX to PDF using LibreOffice headless
+
+        # Convert using LibreOffice headless
         result = subprocess.run([
-            "soffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
+            "libreoffice", "--headless", "--convert-to", "pdf", "--outdir", UPLOAD_FOLDER, docx_path
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Optional: print logs to help with debugging
+        print("STDOUT:", result.stdout.decode())
+        print("STDERR:", result.stderr.decode())
 
         if result.returncode != 0:
             return {"error": result.stderr.decode('utf-8')}, 500
 
-        # Send back PDF file
+        # Return PDF
         if os.path.exists(pdf_path):
             return send_file(pdf_path, mimetype='application/pdf', as_attachment=True, download_name="converted.pdf")
         else:
@@ -142,7 +146,6 @@ def convert_docx_to_pdf():
         return {"error": str(e)}, 500
 
     finally:
-        # Cleanup
         if os.path.exists(docx_path):
             os.remove(docx_path)
         if os.path.exists(pdf_path):
@@ -151,3 +154,4 @@ def convert_docx_to_pdf():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
