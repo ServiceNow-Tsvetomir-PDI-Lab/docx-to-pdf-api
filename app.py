@@ -38,7 +38,7 @@ def convert_docx_to_pdf():
         if result.returncode != 0:
             return {"error": result.stderr.decode('utf-8')}, 500
 
-        # Return PDF
+        # Return PDF Demo Testing
         if os.path.exists(pdf_path):
             return send_file(pdf_path, mimetype='application/pdf', as_attachment=True, download_name="converted.pdf")
         else:
