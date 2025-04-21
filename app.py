@@ -10,12 +10,11 @@ swagger = Swagger(app)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
 @app.route('/convert/docx/to/pdf', methods=['POST'])
 @swag_from({
     'tags': ['Conversion'],
     'summary': 'Convert DOCX to PDF',
-    'description': 'Accepts a DOCX file and returns a converted PDF file.',
+    'description': 'Upload a DOCX file (binary) and get a converted PDF in return.',
     'consumes': ['application/octet-stream'],
     'produces': ['application/pdf'],
     'parameters': [
@@ -23,7 +22,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             'name': 'file',
             'in': 'body',
             'required': True,
-            'description': 'The .docx file to convert',
+            'description': 'Binary .docx file',
             'schema': {
                 'type': 'string',
                 'format': 'binary'
@@ -31,15 +30,9 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         }
     ],
     'responses': {
-        200: {
-            'description': 'PDF file generated successfully'
-        },
-        400: {
-            'description': 'Invalid input or missing file'
-        },
-        500: {
-            'description': 'Internal error or conversion failed'
-        }
+        200: {'description': 'Successfully converted and returns PDF'},
+        400: {'description': 'Invalid input or missing file'},
+        500: {'description': 'Internal server error during conversion'}
     }
 })
 def convert_docx_to_pdf():
@@ -50,10 +43,8 @@ def convert_docx_to_pdf():
         return {"error": "No file data received"}, 400
 
     file_id = str(uuid.uuid4())
-    docx_filename = f"{file_id}.docx"
-    pdf_filename = f"{file_id}.pdf"
-    docx_path = os.path.join(UPLOAD_FOLDER, docx_filename)
-    pdf_path = os.path.join(UPLOAD_FOLDER, pdf_filename)
+    docx_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.docx")
+    pdf_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.pdf")
 
     try:
         with open(docx_path, 'wb') as f:
@@ -83,12 +74,12 @@ def convert_docx_to_pdf():
 
 @app.route('/')
 def index():
-    return "✅ DOCX to PDF Conversion API is running. Visit /docs for Swagger UI."
-
+    return "✅ DOCX to PDF API is running. Visit /docs for Swagger UI."
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 # from flask import Flask, request, send_file
 # import os
