@@ -60,14 +60,12 @@
 
 
 from flask import Flask, request, send_file, jsonify
-from flask_cors import CORS
 from flasgger import Swagger, swag_from
 import os
 import uuid
 import subprocess
 
 app = Flask(__name__)
-CORS(app)
 
 UPLOAD_FOLDER = "uploads"
 DOWNLOAD_FOLDER = "downloads"
