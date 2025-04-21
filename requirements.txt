@@ -1,2 +1,2 @@
 Flask
-Flasgger==0.9.7
+Flasgger==0.9.5
