@@ -1,4 +1,3 @@
-```markdown
 # 📄 DOCX to PDF Conversion API
 
 This is a lightweight Python REST API built with **Flask**, designed to convert `.docx` files to PDF using **LibreOffice in headless mode**.  
@@ -27,6 +26,7 @@ No build or start commands are needed — Render will automatically detect and b
 
 - Convert `.docx` files to `.pdf` using LibreOffice
 - RESTful interface (simple POST request)
+- Swagger UI documentation and live testing
 - Stateless & ephemeral
 - Automatically deletes files after conversion
 - Works with Postman, ServiceNow, and any REST client
@@ -47,13 +47,21 @@ docx-to-pdf-api/
 
 ---
 
-## ⚙️ API Endpoint
+## ⚙️ API Endpoints
 
 ### `POST /convert/docx/to/pdf`
-
+- **Purpose**: Integration with ServiceNow and other systems.
 - **Content-Type**: `application/octet-stream`
 - **Body**: Raw binary of a `.docx` file
 - **Returns**: PDF as a stream (`application/pdf`)
+
+### `POST /convert/docx/to/pdf/swagger`
+- **Purpose**: Interactive testing via Swagger UI
+- **Content-Type**: `multipart/form-data`
+- **Form Field**: `file` (a `.docx` file)
+- **Returns**: Directly streamed PDF file (`application/pdf`)
+
+> Swagger UI is available at: `https://<your-app>.onrender.com/docs`
 
 ---
 
@@ -69,6 +77,15 @@ Upload your `.docx` file in "binary" mode.
 
 ### Sample Response:
 Returns the PDF as a downloadable file.
+
+---
+
+## 🧪 Example Usage (Swagger UI)
+
+- Open: `https://<your-app>.onrender.com/docs`
+- Use the **/convert/docx/to/pdf/swagger** endpoint
+- Upload `.docx` file via `multipart/form-data`
+- Receive the converted PDF immediately in the response
 
 ---
 
@@ -123,19 +140,19 @@ CMD ["python", "app.py"]
 
 ## 🧠 Python App Summary (`app.py`)
 
-- Accepts raw `.docx` files via POST
-- Saves them to disk temporarily
+- Accepts raw `.docx` files via POST (for ServiceNow)
+- Supports file upload via Swagger (`multipart/form-data`)
+- Saves uploaded `.docx` files temporarily in `/uploads`
 - Converts using LibreOffice:
   ```bash
-  libreoffice --headless --convert-to pdf ...
+  soffice --headless --convert-to pdf --outdir uploads/ <filename>.docx
   ```
-- Deletes temporary files after conversion
-- Returns the PDF stream to the client
+- Returns PDF directly as `send_file`
+- Securely deletes all files after request
 
 ---
 
 ## 🔐 Security & Data Privacy
-```markdown
 
 This API is designed with privacy and security in mind. By default:
 
@@ -145,7 +162,5 @@ This API is designed with privacy and security in mind. By default:
 - ✅ No file names, content, or metadata are logged or retained beyond the request lifecycle.
 
 This behavior ensures full confidentiality of any sensitive documents processed via the API.
-
-```
 
 ---
