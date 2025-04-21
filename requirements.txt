@@ -1,1 +1,2 @@
 Flask
+Flasgger==0.9.7
