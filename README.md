@@ -1,5 +1,19 @@
 # 📄 DOCX to PDF Conversion API
 
+## 📚 Table of Contents
+
+- [🌐 Live Deployment (Render)](#-live-deployment-render)
+- [🚀 Features](#-features)
+- [📁 Project Structure](#-project-structure)
+- [⚙️ API Endpoints](#️-api-endpoints)
+- [🧪 Example Usage (Postman)](#-example-usage-postman)
+- [🧪 Example Usage (Swagger UI)](#-example-usage-swagger-ui)
+- [🧰 Deployment Instructions (Render + Docker)](#-deployment-instructions-render--docker)
+- [🐳 Dockerfile Overview](#-dockerfile-overview)
+- [🧠 Python App Summary (`app.py`)](#-python-app-summary-apppy)
+- [🧩 ServiceNow Integration](#-servicenow-integration)
+- [🔐 Security & Data Privacy](#-security--data-privacy)
+
 This is a lightweight Python REST API built with **Flask**, designed to convert `.docx` files to PDF using **LibreOffice in headless mode**.  
 The service is containerized with **Docker** and deployed for free via **Render.com**.
 
@@ -42,7 +56,9 @@ docx-to-pdf-api/
 ├── Dockerfile         # Docker container setup
 ├── requirements.txt   # Python dependencies
 ├── render.yaml        # Render.com deployment config
-└── uploads/           # Temporary storage (automatically cleaned up)
+├── uploads/           # Temporary storage (automatically cleaned up)
+└── ServiceNow_Implementation/
+    └── TG BASF API Convert DOCX to PDF Render.js  # Business Rule integration with ServiceNow
 ```
 
 ---
@@ -149,6 +165,25 @@ CMD ["python", "app.py"]
   ```
 - Returns PDF directly as `send_file`
 - Securely deletes all files after request
+
+---
+
+## 🧩 ServiceNow Integration
+
+You can easily integrate this API within ServiceNow using a **Business Rule** to trigger PDF conversion after a `.docx` file is attached to a record.
+
+The implementation is available in the repo:
+📁 [`ServiceNow_Implementation/TG BASF API Convert DOCX to PDF Render.js`](https://github.com/ServiceNow-Tsvetomir-PDI-Lab/docx-to-pdf-api/blob/main/ServiceNow_Implementation/TG%20BASF%20API%20Convert%20DOCX%20to%20PDF%20Render.js)
+
+### 🔧 Key Implementation Details:
+- Table: `sys_attachment`
+- Trigger: `After Insert`
+- Condition: `content_type` is `.docx`
+- Logic:
+  - Uses `sn_ws.RESTMessageV2()` to POST the binary content of the DOCX
+  - Sends to `https://docx-to-pdf-api-1.onrender.com/convert/docx/to/pdf`
+  - Receives PDF and attaches it back to the originating record
+  - Cleans up and logs status via `gs.info()` and `gs.error()`
 
 ---
 
