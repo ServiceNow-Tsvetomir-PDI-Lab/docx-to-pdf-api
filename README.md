@@ -58,7 +58,7 @@ docx-to-pdf-api/
 ├── render.yaml        # Render.com deployment config
 ├── uploads/           # Temporary storage (automatically cleaned up)
 └── ServiceNow_Implementation/
-    └── TG BASF API Convert DOCX to PDF Render.js  # Business Rule integration with ServiceNow
+    └── TG API Convert DOCX to PDF Render.js  # Business Rule integration with ServiceNow
 ```
 
 ---
@@ -173,7 +173,7 @@ CMD ["python", "app.py"]
 You can easily integrate this API within ServiceNow using a **Business Rule** to trigger PDF conversion after a `.docx` file is attached to a record.
 
 The implementation is available in the repo:
-📁 [`ServiceNow_Implementation/TG BASF API Convert DOCX to PDF Render.js`](https://github.com/ServiceNow-Tsvetomir-PDI-Lab/docx-to-pdf-api/blob/main/ServiceNow_Implementation/TG%20BASF%20API%20Convert%20DOCX%20to%20PDF%20Render.js)
+📁 [`ServiceNow_Implementation/TG API Convert DOCX to PDF Render.js`](https://github.com/ServiceNow-Tsvetomir-PDI-Lab/docx-to-pdf-api/blob/main/ServiceNow_Implementation/TG%20API%20Convert%20DOCX%20to%20PDF%20Render.js)
 
 ### 🔧 Key Implementation Details:
 - Table: `sys_attachment`
