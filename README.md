@@ -109,7 +109,7 @@ Ensure your repo (like https://github.com/ServiceNow-Tsvetomir-PDI-Lab/docx-to-p
 5. Render will auto-detect the `Dockerfile` and build the image
 6. After deployment, you’ll receive a public HTTPS URL like:
    ```
-   https://docx-to-pdf-api.onrender.com/convert/docx/to/pdf
+   https://docx-to-pdf-api-1.onrender.com/convert/docx/to/pdf
    ```
 
 ---
