@@ -5,6 +5,7 @@
 - [🌐 Live Deployment (Render)](#-live-deployment-render)
 - [🚀 Features](#-features)
 - [📁 Project Structure](#-project-structure)
+- [📊 Architecture Diagram](#-architecture-diagram)
 - [⚙️ API Endpoints](#️-api-endpoints)
 - [🧪 Example Usage (Postman)](#-example-usage-postman)
 - [🧪 Example Usage (Swagger UI)](#-example-usage-swagger-ui)
@@ -60,6 +61,14 @@ docx-to-pdf-api/
 └── ServiceNow_Implementation/
     └── TG API Convert DOCX to PDF Render.js  # Business Rule integration with ServiceNow
 ```
+
+---
+
+## 📊 Architecture Diagram
+
+Below is a high-level overview of the full DOCX to PDF conversion pipeline, from API development to live deployment:
+
+![DOCX to PDF Architecture](https://raw.githubusercontent.com/ServiceNow-Tsvetomir-PDI-Lab/docx-to-pdf-api/main/Documentation/Diagram%20DOCX%20to%20PDF.png)
 
 ---
 
